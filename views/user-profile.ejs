@@ -1,0 +1,184 @@
+<%- include partials/header.ejs %>
+    <main>
+     		        
+ 	<% if(error && error.length > 0){ %>
+        <div class="flash">
+            <div class="alert alert-warning" role="alert">
+                <div class="alert__header">
+                    <%= error %>
+                </div>
+            </div> 
+        </div>
+    <% } %>
+    <% if(success && success.length > 0){ %>
+        <div class="flash">
+            <div class="alert alert-success" role="alert">
+                <div class="alert__header">
+                    <%= success %>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+        <div class="profile-header">
+            <div class="profile-image">
+            <% let imgUrl = user.profileImg.split('/upload/'); %>
+                <img src="<%= imgUrl.join('/upload/w_120,c_fill,ar_1:1,g_auto,r_max/') %>" alt="Profile Image">
+                <div class="user-info" hidden>
+                    <div class="black"><strong><%= user.fullName %></strong></div>
+                    <!--<div>Age - <%= (user.age) ? `${user.age} years old` : '' %></div>-->
+                    <div>Location - <%= user.location %></div>
+                    <div class="user-info__edit"><a href="/users/<%= user._id %>/edit">Edit Profile</a></div>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="black"><strong><%= user.fullName %></strong></div>
+                <!--<div>Age - <%= (user.age) ? `${user.age} years old` : '' %></div>-->
+                <div>Location - <%= user.location %></div>
+                <div class="user-info__edit"><a href="/users/<%= user._id %>/edit">Edit Profile</a></div>
+            </div>
+            <div class="info-container" style="grid-area: styles;">
+                <div class="climbing-info" id="climbing-grades">
+                    <div>
+                        <a class="edit" href="/users/<%= user._id %>/edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </div>
+                    <div class="black">
+                        <strong>Lead</strong>
+                        <hr>
+                    </div>
+                    <div class="black">
+                        <strong>Follow</strong>
+                        <hr>
+                    </div>
+                    <div>Sport</div>
+                    <div><%= (user.climbingStyles.sport.checked) ? user.climbingStyles.sport.lead : "--" %></div>
+                    <div><%= (user.climbingStyles.sport.checked) ? user.climbingStyles.sport.follow : "--"  %></div>
+                    <div>Trad</div>
+                    <div><%= (user.climbingStyles.trad.checked) ? user.climbingStyles.trad.lead : "--"  %></div>
+                    <div><%= (user.climbingStyles.trad.checked) ? user.climbingStyles.trad.follow : "--"  %></div>
+                    <div>Boulder</div>
+                    <div><%= (user.climbingStyles.boulder.checked) ? user.climbingStyles.boulder.grade : "--" %></div>
+                    <div></div>
+                    <div>Ice</div>
+                    <div><%= (user.climbingStyles.ice.checked) ? user.climbingStyles.ice.lead : "--" %></div>
+                    <div><%= (user.climbingStyles.ice.checked) ? user.climbingStyles.ice.follow : "--" %></div>
+                    <div>Aid</div>
+                    <div><%= (user.climbingStyles.aid.checked) ? user.climbingStyles.aid.lead : "--" %></div>
+                    <div><%= (user.climbingStyles.aid.checked) ? user.climbingStyles.aid.follow : "--" %></div>
+                </div>
+            </div>
+            <div class="info-container" id="climbing-areas" style="grid-area: areas;">
+                <div>
+                    <a class="edit" href="/users/<%= user._id %>/edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <span class="black">
+                        <strong>Favorite Climbing Areas</strong>
+                    </span>
+                </div>
+                <ul>
+                <% user.climbingAreas.forEach(cur => { %>
+                    <li><%= cur %></li>
+                <% }); %>
+                </ul>
+            </div>
+        </div>
+        <section class="button-section">
+            <div class="flex flex-bt">
+                <a class="button purple-btn" href="<%= user._id %>/gear"><strong>Add Gear</strong></a>
+                <a class="button red-btn active rack" rack="all">All</a>
+                <a class="button red-btn rack" rack="bouldering">Bouldering</a>
+                <a class="button red-btn rack" rack="sport">Sport</a>
+                <a class="button red-btn rack" rack="trad">Trad</a>
+                <a class="button red-btn rack" rack="ice">Ice</a>
+            </div>
+        </section>
+        <section class="section-b">
+            <% if (gear.length > 0) { %>
+                <% gear.forEach(item => { %>
+                    <a class="gear-link" href="<%= `${user._id}/gear/${item._id}` %>" rack="<%= item.racks.join(', ')%>">
+                        <div class="info-container hover-shadow">
+                            <div class="img-container">
+                                <% let imgLink = item.base.image %>
+                                <% let chunk = imgLink.split("/") %>
+                                <% let len = chunk.length %>
+                                <% chunk.splice((len - 2), 0, 'w_360,c_fill,ar_1:1,g_auto') %>
+                                <img class="gear-thumb" src="<%= chunk.join('/') %>"></img>
+                            </div>
+                            <hr/>
+                            <div>
+                                <%= item.base.name %>
+                            </div>
+                            <div>
+                                <%= item.base.brand.name %>
+                            </div>
+                        </div>
+                    </a>
+                <% }); %>
+            <% } else { %>
+                <div class="large-msg"> 
+                    <h1>Looks like you don't have any gear saved!</h1>
+                </div>
+            <% }; %>
+        </section>
+        </main>
+        <%- include partials/footer.ejs %>
+    </body>
+    <script>
+
+        Array.from(document.querySelectorAll(".rack")).forEach(cur => {
+            cur.addEventListener("click", (event) => {
+                let rack = event.target.getAttribute("rack");
+                removeClass(Array.from(document.querySelectorAll(".rack")), "active")
+                event.target.classList.add("active");
+                // hide gear that do not belong to the specified rack
+                Array.from(document.querySelectorAll(".gear-link")).forEach(link => {
+                    if (rack === "all") {
+                         link.classList.remove("hide");
+                    }
+                    else if (link.getAttribute("rack") !== rack) {
+                        link.classList.add("hide");
+                    }
+                    else {
+                         link.classList.remove("hide");
+                    }
+                });
+            });
+        });
+
+        function removeClass(eleArr, className) {
+            eleArr.forEach(ele => {
+                ele.classList.remove(className);
+            });
+        }
+
+        const EditGrades = () => {
+            console.log("now you can edit your climbing grades");
+        }
+
+        const EditAreas = () => {
+            console.log("now you can edit your climbing areas");
+        }
+
+        const addEditListeners = () => {
+            let links = Array.from(document.querySelectorAll(".edit"));
+            links.forEach(cur => {
+                cur.addEventListener("click", (event) => {
+                    let target = event.currentTarget.getAttribute("target");
+                    console.log(target);
+                    if (target === "climbing-grades") {
+                        EditGrades();
+                    }
+                    else {
+                        EditAreas();
+                    }
+                });
+            });
+        }
+
+        addEditListeners();
+
+    </script>
+</html>

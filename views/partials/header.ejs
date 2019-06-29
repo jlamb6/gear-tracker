@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="/styles/login.css">
+    <script src="https://kit.fontawesome.com/d8fda67e2a.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <a class="logo" href="/">
+                    <i class="nav-icon"></i>
+                    <span class="logo-header">Gear Tracker</span>
+                </a>
+                <% let localUser = (typeof currentUser != 'undefined' && currentUser) ? JSON.stringify(currentUser) : false; %>
+                <% let url = (currentUser) ? `/users/${currentUser._id}` : '/sign-in'; %>
+                <div class="nav-links">
+                    <% if (currentUser) { %>
+                    <a href="/logout" class="nav-item">Logout</a>
+                    <% }; %>
+                </div>
+                <a href="<%= url %>" class="purple-btn">
+                    <span>
+                        <% if (currentUser) { %>
+                            <% if (typeof currentUser.fullName == 'undefined') { %>
+                                <%= "Your Profile"; %>
+                            <% } else { %> 
+                                <%= currentUser.fullName; %>
+                            <% } %>
+                        <% } else { %>
+                            <%= "Sign in"; %>
+                        <% } %>
+                    </span>
+                </a>
+            </div>
+        </nav>
+    </header>
+    

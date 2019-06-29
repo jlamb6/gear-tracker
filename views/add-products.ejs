@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add Gear</title>
+    </head>
+    <body>
+        <main>
+            <form method="POST" action="/gear/add" enctype="multipart/form-data">
+                <label>Brand</label>
+                <select id="brand" type="text" name="brand">
+                    <option value="0">Choose</option>
+                    <% brands.forEach((cur, index) => { %>
+                        <option <%- "value=" + cur.id + ">" %><%= cur.name %></option>
+                    <% }); %>
+                </select>
+                <label>Series</label>
+                <select id="series" type="text" name="series"></select>
+                <label>Category</label>
+                <select id="cat" type="text" name="cat"></select>
+                <label>Name</label>
+                <input type="text" name="name">
+                <!-- <select id="gear" type="text" name="name"></select> -->
+                <label>Image</label>
+                <input type="file" name="image" accept="jpg, jpeg, png">
+                <label>Kilonewtons</label>
+                <input type="text" name="kn">
+                <label>Description</label>
+                <input type="text" name="desc">
+                <input type="submit" value="Submit">
+            </form>
+        </main>
+    </body>
+    <script>
+
+        document.querySelector("#brand").addEventListener("change", (event) => {
+            let brandId = event.target.value;
+            fetch(`../../api/brands/${brandId}/series`)
+                .then(function(response) {
+                    console.log(response);
+                    return response.json();
+                })
+                .then(function(data) {
+                    console.log(data);
+                    removeDropdownOptions(document.querySelector("#series"));
+                    createDropdownOptions(data.series, document.querySelector("#series"));
+                });
+            fetch('../../api/categories')
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    removeDropdownOptions(document.querySelector("#cat"));
+                    createDropdownOptions(data.categories, document.querySelector("#cat"));
+                });
+        });
+/*
+        document.querySelector("#series").addEventListener("change", (event) => {
+            let seriesId = event.target.value;
+            fetch(`../../api/series/${seriesId}/gear`)
+                .then(function(response) {
+                    console.log(response);
+                    return response.json();
+                })
+                .then(function(data) {
+                    console.log(data);
+                    removeDropdownOptions(document.querySelector("#gear"));
+                    createDropdownOptions(data.gear, document.querySelector("#gear"));
+                });
+        });
+*/
+
+        function removeDropdownOptions(ele) {
+            while(ele.firstChild) {
+                ele.removeChild(ele.firstChild);
+            }
+            let opt = document.createElement("option");
+            opt.value = "0";
+            opt.innerText = "choose";
+            ele.appendChild(opt);
+        }
+
+        function createDropdownOptions(options, ele) {
+            options.forEach(option => {
+                let opt = document.createElement("option");
+                opt.value = option._id;
+                opt.innerText = option.name;
+                ele.appendChild(opt);
+            });
+        }
+
+
+    </script>
+</html>

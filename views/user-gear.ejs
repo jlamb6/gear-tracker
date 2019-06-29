@@ -1,0 +1,313 @@
+<%- include partials/header.ejs %>
+        <div id="overlay" class="overlay hide"></div>
+        <main class="user-gear pt-0">
+            <section class="button-section racks">
+                <div class="flex flex-bt">
+                    <a class="button purple-btn" id="add-all">
+                        <strong>Add to All</strong>
+                    </a>
+                    <a itemprop="<%= gear.racks.includes('bouldering') %>" 
+                       rack="bouldering" 
+                       class="button red-btn <%= (gear.racks.includes('bouldering')) ? 'in-rack ' : '' %>rack">
+                       Bouldering
+                    </a>
+                    <a itemprop="<%= gear.racks.includes('sport') %>" 
+                       rack="sport" 
+                       class="button red-btn <%= (gear.racks.includes('sport')) ? 'in-rack ' : '' %>rack">
+                       Sport
+                    </a>
+                    <a itemprop="<%= gear.racks.includes('trad') %>" 
+                       rack="trad" 
+                       class="button red-btn <%= (gear.racks.includes('trad')) ? 'in-rack ' : '' %>rack">
+                       Trad
+                    </a>
+                    <a itemprop="<%= gear.racks.includes('ice') %>" 
+                       rack="ice" 
+                       class="button red-btn <%= (gear.racks.includes('ice')) ? 'in-rack ' : '' %>rack">
+                       Ice
+                    </a>
+                </div>
+            </section>
+            <section>
+                <div class="info-container pb-40 center">
+                    <h2 class="black"><%= gear.base.name %></h2>
+                    <h4><%= gear.base.series.name %></h4>
+                    <img id="main-img" style="width: 100%" src="<%= gear.base.image %>">
+                </div>
+                <div>
+                    <div class="gear-images">
+                        <img class="img-link" src="<%= gear.base.image %>">
+                        <% gear.images.forEach((cur, index) => { %>
+                            <% if (index < 3) { %>
+                                <img class="img-link" src="<%= cur %>"/>
+                            <% } %>
+                        <% }); %>
+                        <span class="right">
+                            <button id="add-image" class="add-image">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </section>  
+            <section>
+                <form id="gear-form" class="grid-2-col gear-form">
+                    <div class="form-group">
+                        <label>Purchase Date</label>
+                        <input class="input round" type="text" name="dateOfPurchase" value="<%= gear.dateOfPurchase %>">
+                    </div>
+                    <div class="form-group">
+                        <label>Manufacture Date</label>
+                        <input class="input round" type="text" name="dateOfManufacturing" value="<%= gear.dateOfManufacturing %>">
+                    </div>
+                    <div class="form-group">
+                        <label>Condition</label>
+                        <input class="input round" type="text" name="condition" value="<%= gear.condition %>">
+                    </div>
+                    <div class="form-group">
+                        <label>Marker</label>
+                        <input class="input round" type="text" name="marker" value="<%= gear.marker %>">
+                    </div>
+                    <div class="fall-container">
+                        <div class="flex col-3">
+                            <div class="black">Falls</div>
+                            <div class="center small-text"><%= gear.falls.length %> Lifetime Fall<%= (gear.falls.length > 1) ? 's' : ''; %></div>
+                            <div id="add-fall" class="right">
+                                <i class="fas fa-plus add-fall"></i>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="flex col-3 red small-text">
+                            <div>Date</div>
+                            <div class="center">Size</div>
+                            <div class="right">Factor</div>
+                        </div>
+                        <% gear.falls.forEach(fall => {  %>
+                            <% if (fall.date !== null) { %>
+                            <div class="flex col-3 small-text">
+                                <% let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']%>
+                                <% let formattedDate =  `${months[fall.date.getMonth()]} ${fall.date.getDate().toString().padStart(2, '0')}, ${fall.date.getFullYear()}`%>
+                                <div><%= formattedDate %></div>
+                                <div class="center"><%= fall.size %> ft</div>
+                                <div class="right"><%= fall.factor %></div>
+                            </div>
+                            <% } %>
+                        <% }); %>
+                        <div id="fall-container" class="grid col-3 pt-8 small-text">
+                            <input class="input round fall-input" type="date" name="date" hidden>
+                            <input class="input round fall-input" type="number" name="size" hidden>
+                            <select class="input round fall-input" name="factor" hidden>
+                                <option value="">Choose a factor</option>
+                                <option value="<1">&lt;1</option>
+                                <option value="1">1</option>
+                                <option value=">1">&gt;1</option>
+                                <option value="2">2</option>
+                                <option value=">2">&gt;2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group note-container">
+                        <label>Notes</label>
+                        <textarea class="input round" name="notes" rows="6"><%= gear.notes %></textarea>
+                    </div>
+                    <button id="save-changes" type="button" class="save-gear large-edit mt-0">Save Changes</button>
+                </form>
+                <form method="POST" action="?_method=DELETE">
+                    <button type="submit" class="large-delete">Delete</button>
+                </form>
+            </section>
+        </main>
+        <div id="img-upload-container" class="img-upload-container hide">
+            <h2 class="upload-header">File Upload
+                <span target="img-upload-container" class="close">
+                    <i class="fas fa-times"></i>
+                </span>
+            </h2>
+            <form action="" method="POST" enctype="multipart/form-data">
+                <div class="upload-form">
+                    <img class="cloud-upload" src="../../../images/cloud-upload.png">
+                    <button class="file-btn">Browse Files</button>
+                    <input id="product-image" type="file" name="image" style="
+                                                                                position: absolute;
+                                                                                bottom: 0;
+                                                                                width: 100%;
+                                                                                height: 60px;
+                                                                                opacity: 0;
+                                                                                cursor: pointer;
+                                                                            ">
+                    <label><span class="dragndrop"></span></label>
+                </div>
+            </form>
+            <div class="upload-status">
+                <div class="status-banner" id="upload-text">Waiting for images</div>
+                <div class="uploaded-files" id="uploaded-files">
+                </div>
+            </div>
+            <div class="upload-btn">
+                <button id="save-images">Close</button>
+            </div>
+        </div>
+        <input id="gear-id" type="text" value="<%= gear._id %>" hidden>
+        <%- include partials/footer.ejs %>
+    </body>
+    <script>
+        const input = document.querySelector("#product-image");
+        const url = `${window.location.href}/add-image`;
+        const upload = (file) => {
+            console.log(file);
+            handleUpload(file.name);
+            const formData = new FormData();
+            formData.append('image', file);
+            fetch(url, {
+                method: "POST",
+                body: formData
+            })
+            .then(data => console.log(data))
+            .catch(err => console.log(err));    
+        };
+
+        const onSelectFile = () => upload(input.files[0]);
+        const handleUpload = (img) => {
+            let container = document.querySelector("#uploaded-files");
+            let banner = document.querySelector("#upload-text");
+            let fileZone = document.createElement("div");
+            let image = document.createElement("img");
+            let imageName = document.createElement("h4");
+            let infoBlock = document.createElement("div");
+            let statusBar = document.createElement("div");
+            let statusBar2 = document.createElement("div");
+            let statusText = document.createElement("div");
+            fileZone.classList.add("file-zone");
+            infoBlock.classList.add("info-block");
+            imageName.classList.add("upload-status__img", "image-name", "m-0", "mb-5");
+            statusBar.classList.add("status-bar");
+            statusBar2.classList.add("upload-status__status", "status-bar", "green");
+            statusText.classList.add("upload-status__text", "mt-5");
+            banner.innerText = "Uploading";
+            imageName.innerText = img;
+            statusText.innerText = "Uploading";
+            image.src = "../../../images/image-complete.png";
+            statusBar.appendChild(statusBar2);
+            infoBlock.appendChild(imageName);
+            infoBlock.appendChild(statusBar);
+            infoBlock.appendChild(statusText);
+            fileZone.appendChild(image);
+            fileZone.appendChild(infoBlock);
+            container.appendChild(fileZone);
+            document.querySelector("#save-images").innerText = "Save";
+        }
+
+        input.addEventListener('change', onSelectFile, false);
+        
+        document.querySelector("#add-image").addEventListener("click", (event) => {
+            document.querySelector("#img-upload-container").classList.remove("hide");
+            document.querySelector("#overlay").classList.remove("hide");
+        });
+
+        Array.from(document.querySelectorAll(".close")).forEach(cur => {
+            cur.addEventListener("click", (event) => {
+                let t = event.currentTarget.getAttribute("target");
+                document.querySelector(`#${t}`).classList.add("hide");
+                document.querySelector('#overlay').classList.add("hide");
+            });
+        });
+
+        Array.from(document.querySelectorAll(".img-link")).forEach(cur => {
+            cur.addEventListener("click", (event) => {
+                let source = event.currentTarget.src;
+                document.querySelector("#main-img").src = source;
+            });
+        });
+
+        Array.from(document.querySelectorAll(".rack")).forEach(cur => {
+            cur.addEventListener("click", (event) => {
+                let rack = event.target;
+                let gearId = document.querySelector("#gear-id").value;
+                let rackName = rack.getAttribute("rack");
+                let inRack = (rack.getAttribute("itemprop") === "true") ? true : false;
+                let task = (inRack) ? "remove" : "add";
+                if (inRack) {
+                    // remove from rack
+                    rack.classList.remove("in-rack");
+                    rack.setAttribute("itemprop", "false");
+                }
+                else {
+                    // add to rack
+                    rack.classList.add("in-rack");
+                    rack.setAttribute("itemprop", "true");
+                }
+                let data = {
+                    rack: rackName,
+                    task: task
+                };
+                console.log(data);
+                fetch(`../../../api/user-gear/${gearId}/rack`, {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => console.log(err));
+            });
+        });
+
+        document.querySelector("#save-images").addEventListener("click", (event) => {
+            document.querySelector("#img-upload-container").classList.add("hide");
+            document.querySelector('#overlay').classList.add("hide");
+        });
+
+        document.querySelector("#add-fall").addEventListener("click", (event) => {
+            let fallContainer = document.querySelector("#fall-container");
+            let fallInputs = Array.from(fallContainer.querySelectorAll(".fall-input"));
+            fallInputs.forEach(cur => cur.hidden = false);
+            fallInputs[0].focus();
+        });
+/*
+        document.querySelector("#save-changes").addEventListener("click", (event) => {
+            let gearId = document.querySelector("#gear-id").value;
+            let data = formData(document.querySelector("#gear-form"));
+            console.log(data);
+            fetch(`../../../api/user-gear/${gearId}`, {
+                method: "PUT",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(res => res.json())
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
+        });
+*/
+        let formData = (form) => {
+            let data = Array.from(document.querySelectorAll(".input")).map(cur => {
+                let d = {
+                    name: cur.name,
+                    value: cur.value,
+                    type: cur.type
+                };
+                return d;
+            });
+            let allData = {};
+            data.forEach(cur => {
+                allData[cur.name] = cur.value;
+            });
+            return allData;
+        };
+
+        document.querySelector("#add-all").addEventListener("click", (event) => {
+            let buttons = Array.from(document.querySelectorAll("rack"));
+            let racks = buttons.map(cur => cur.rack);
+            // add gear to all racks. this can just override the orignal value because it includes everything
+            // add the in-rack class to all the buttons
+            buttons.forEach(cur => cur.classList.add("in-rack"));
+        });
+
+
+    </script>
+</html>

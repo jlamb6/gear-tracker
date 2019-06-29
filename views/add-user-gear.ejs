@@ -1,0 +1,304 @@
+<%- include partials/header.ejs %>
+<% let first = "abcdefg"; %>
+<% let second = "hijklmn"; %>
+<% let third = "opqrstuvwyxz"; %>
+<% let colOneBrands = brands.filter(brand => first.includes(brand.name.charAt(0).toLowerCase())); %>
+<% let colTwoBrands = brands.filter(brand => second.includes(brand.name.charAt(0).toLowerCase())); %>
+<% let colThreeBrands = brands.filter(brand => third.includes(brand.name.charAt(0).toLowerCase())); %>
+        <div id="overlay" class="overlay hide"></div>
+        <main class="grid-3-col">
+            <div id="header" class="grid-header center">
+                <h1>Choose a Brand</h1>
+                <input id="search" class="large-search" type="text" name="search" itemprop="brand" placeholder="Search by name">
+            </div>
+            <section class="col-1">
+                <div class="col-header">
+                    <h4 class="m-0 purple">A - G</h4>
+                    <hr class="red-bg thick">
+                    <ul class="brand-list" id="list-a-h">
+                        <% colOneBrands.forEach(brand => { %>
+                            <li class="brand" brandid="<%= brand._id %>"><%= brand.name %></li>
+                        <% }); %>
+                    </ul>
+                </div>
+            </section>
+            <section class="col-2">
+                <h4 class="m-0 purple">H - N</h4>
+                <hr class="red-bg thick">
+                <ul class="brand-list" id="list-g-n">
+                        <% colTwoBrands.forEach(brand => { %>
+                            <li class="brand" brandid="<%= brand._id %>"><%= brand.name %></li>
+                        <% }); %>
+                    </ul>
+                </ul>
+            </section>
+            <section class="col-3">
+                <h4 class="m-0 purple">L - Z</h4>
+                <hr class="red-bg thick">
+                <ul class="brand-list" id="list-l-z">
+                    <% colThreeBrands.forEach(brand => { %>
+                            <li class="brand" brandid="<%= brand._id %>"><%= brand.name %></li>
+                        <% }); %>
+                    </ul>
+                </ul>
+            </section>
+        </main>
+        <%- include partials/footer.ejs %>
+    </body>
+    <script>
+
+        Array.from(document.querySelectorAll(".brand")).forEach(cur => {
+            cur.addEventListener("click", (event) => {
+                let brandId = event.target.getAttribute("brandid");
+                fetch(`../../../api/brands/${brandId}/series`)
+                    .then(function(response) {
+                        console.log(response);
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        console.log(data);
+                        let sections = Array.from(document.querySelectorAll("section"));
+                        sections.forEach(cur => removeSectionColumn(cur));
+                        data.series.forEach(brand => {
+                            let container = createContainer(brand);
+                            document.querySelector("main").appendChild(container);
+                        });
+                        document.querySelector("#header").querySelector("h1").innerText = "Choose a Product Series";
+                        setSeriesHandler();
+                        document.querySelector("#search").setAttribute("itemprop", "series");
+                        document.querySelector("#search").value = '';
+                    });
+            });
+        });
+
+        function createMainContainer(data) {
+            let imgLink = (data.image) ? data.image : false;
+            let div = document.createElement("div");
+            let h4 = document.createElement("h4");
+            let header = document.createElement("h2");
+            let imgContainer = document.createElement("div");
+            let img = document.createElement("img");
+            div.classList.add("info-container", "pb-40", "center");
+            header.innerText = data.name;
+            header.classList.add("black");
+            h4.innerText = data.series.name;
+            imgContainer.classList.add("img-container");
+            img.src = imgLink;
+            img.classList.add("gear-thumb");
+            imgContainer.appendChild(img);
+            div.appendChild(header);
+            div.appendChild(h4);
+            div.appendChild(imgContainer);
+            return div;
+        }
+
+        function createContainer(data, imgSize = 'w_360,') {
+            let imgLink = (data.image) ? data.image : false;
+            let chunk = (imgLink) ? imgLink.split("/") : "";
+            let len = chunk.length;
+            if (imgLink) chunk.splice((len - 2), 0, `${imgSize}c_fill,ar_1:1,g_auto`);
+            let url = (imgLink) ? chunk.join("/") : "";
+            let div = document.createElement("div");
+            div.classList.add("info-container", "hover-shadow");
+            let header = document.createElement("h4");
+            header.innerText = data.name;
+            header.classList.add("mb-0", "center")
+            let p = document.createElement("p");
+            p.innerText = data.brand.name;
+            p.classList.add("center", "mt-0");
+            let imgContainer = document.createElement("div");
+            imgContainer.classList.add("img-container");
+            let img = document.createElement("img");
+            img.src = url;
+            img.classList.add("gear-thumb");
+            imgContainer.appendChild(img);
+            let a = document.createElement("a");
+            a.classList.add("gear-link");
+            a.id = data._id;
+            div.appendChild(header);
+            div.appendChild(p);
+            div.appendChild(imgContainer);
+            a.appendChild(div);
+            return a;
+        }
+
+        function removeSectionColumn(ele) {
+            while(ele.firstChild) {
+                ele.removeChild(ele.firstChild);
+            }
+            ele.parentNode.removeChild(ele);
+        }
+
+        function createDropdownOptions(options, ele) {
+            options.forEach(option => {
+                let opt = document.createElement("option");
+                opt.value = option._id;
+                opt.innerText = option.name;
+                ele.appendChild(opt);
+            });
+        }
+
+        function setSeriesHandler() {
+            Array.from(document.querySelectorAll(".gear-link")).forEach(cur => {
+                cur.addEventListener("click", (event) => {
+                    let seriesId = event.currentTarget.id;
+                    fetch(`../../../api/series/${seriesId}/gear`)
+                        .then(function(response) {
+                            console.log(response);
+                            return response.json();
+                        })
+                        .then(function(data) {
+                            console.log(data);
+                            let series = Array.from(document.querySelectorAll(".gear-link"));
+                            series.forEach(cur => removeSectionColumn(cur));
+                            data.gear.forEach(gear => {
+                                let container = createContainer(gear);
+                                document.querySelector("main").appendChild(container);
+                            });
+                            document.querySelector("#header").querySelector("h1").innerText = "Choose Your Gear";
+                            setGearHandlers();
+                            document.querySelector("#search").setAttribute("itemprop", "gear");
+                            document.querySelector("#search").value = '';
+                        });
+                });
+            });
+        }
+
+        function pullSeriesGear(seriesId) {
+            fetch(`../../../api/series/${seriesId}/gear`)
+                .then(function(response) {
+                    console.log(response);
+                    return response.json();
+                })
+                .then(function(data) {
+                    console.log(data);
+                    let series = Array.from(document.querySelectorAll(".gear-link"));
+                    series.forEach(cur => removeSectionColumn(cur));
+                    data.gear.forEach(gear => {
+                        let container = createContainer(gear);
+                        document.querySelector("main").appendChild(container);
+                    });
+                    setGearHandlers();
+                });
+        }
+
+        function setGearHandlers() {
+            Array.from(document.querySelectorAll(".gear-link")).forEach(cur => {
+                cur.addEventListener("click", (event) => {
+                    let gearId = event.currentTarget.id
+                    fetch(`../../../api/gear/${gearId}`)
+                        .then(function(response) {
+                            console.log(response);
+                            return response.json();
+                        })
+                        .then(function(data) {
+                            console.log(data);
+                            let gear = Array.from(document.querySelectorAll(".gear-link"));
+                            gear.forEach(cur => removeSectionColumn(cur));
+                            let container = createMainContainer(data.gear, '');
+                            document.querySelector("main").appendChild(container);
+                            document.querySelector("#header").classList.add("hide");
+                            document.querySelector("main").classList.remove("grid-3-col");
+                            document.querySelector("main").classList.add("user-gear");
+                            document.querySelector("main").appendChild(createGearForm(data.gear._id, data.gear.image));
+                        });
+                });
+            });
+        }
+
+        function createGearForm(gearId, img) {
+            let form = document.createElement("form");
+            let btn = document.createElement("button");
+            let hiddenInput = document.createElement("input");
+            hiddenInput.hidden = true;
+            hiddenInput.value = gearId;
+            hiddenInput.name = "id";
+            let hiddenInput2 = document.createElement("input");
+            hiddenInput2.hidden = true;
+            hiddenInput2.value = img;
+            hiddenInput2.name = "img";
+            const inputs = [['Purchase Date', 'dop', 'date'], ['Manufacture Date', 'dom', 'date'], 
+                            ['Condition', 'condition', 'input'], ['Marker', 'marker', 'input'], ['Notes', 'notes', 'text']];
+            form.classList.add("grid-2-col", "gear-form-2");
+            inputs.forEach(input => {
+                form.appendChild(createFormGroup(input[0], input[1], input[2]));
+            });
+            btn.type = "submit";
+            btn.innerText = "Save";
+            btn.id = "save-gear";
+            btn.classList.add("large-edit", "save-gear");
+            form.appendChild(hiddenInput);
+            form.appendChild(hiddenInput2);
+            form.appendChild(btn);
+            form.id = gearId;
+            form.method = "POST";
+            form.action = "gear";
+            return form;
+        }
+
+        function createFormGroup(labelText, inputName, inputType) {
+            let div = document.createElement("div");
+            let label = document.createElement("label");
+            let input;
+            div.classList.add("form-group");
+            label.innerText = labelText;
+            if (inputType === 'input') {
+                input = document.createElement("input");
+                input.type = "text";
+            } 
+            else if (inputType === 'date') {
+                input = document.createElement("input");
+                input.type = "date";
+            }
+            else {
+                input = document.createElement("textarea");
+                input.rows = 6;
+            }
+            if (labelText === "Notes") div.classList.add("note-container");
+            input.classList.add("input", "round");
+            input.name = inputName;
+            div.appendChild(label);
+            div.appendChild(input);
+            return div;
+        }
+
+        document.querySelector("#search").addEventListener("keyup", (event) => {
+            let val = event.target.value;
+            let item = event.target.getAttribute("itemprop");
+            if (item === "brand") {
+                let arr = Array.from(document.querySelectorAll("li.brand"));
+                arr.forEach(cur => {
+                    if (cur.innerText.toLowerCase().includes(val.toLowerCase())) {
+                        cur.classList.remove("hide");
+                    }
+                    else {
+                        cur.classList.add("hide");
+                    }
+                });
+            }
+            else if (item === "series") {
+                let arr = Array.from(document.querySelectorAll(".gear-link"));
+                arr.forEach(cur => {
+                    if (cur.querySelector("h4").innerText.toLowerCase().includes(val.toLowerCase())) {
+                        cur.classList.remove("hide");
+                    }
+                    else {
+                        cur.classList.add("hide");
+                    }
+                });
+            }
+            else if (item === "gear") {
+                let arr = Array.from(document.querySelectorAll(".gear-link"));
+                arr.forEach(cur => {
+                    if (cur.querySelector("h4").innerText.toLowerCase().includes(val.toLowerCase())) {
+                        cur.classList.remove("hide");
+                    }
+                    else {
+                        cur.classList.add("hide");
+                    }
+                });
+            }
+        });
+        
+    </script>
+</html>

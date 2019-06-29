@@ -1,0 +1,33 @@
+<%- include partials/header.ejs %>
+    <main>
+        <div class="login-form">
+            <div class="login-form__main-container">
+                <div class="login-form__header">
+                    <img src="/images/bd.png" alt="GearTracker main logo">
+                </div>
+                <div class="login-form__body">
+                    <form method="POST" action="/sign-up">
+                        <h2 class="login-form__h2">Sign up</h2>
+                        <div class="login-form__input-container">
+                            <span><i class="fa fa-user"></i></span>
+                            <input type="email" name="username" placeholder="Email" aria-label="email" autocomplete="off">
+                            <span></span>
+                        </div>
+                        <div class="login-form__input-container">
+                            <span><i class="fas fa-lock"></i></span>
+                            <input type="password" name="password" placeholder="Password" aria-label="password" autocomplete="off">
+                            <span></span>
+                        </div>
+                        <div class="login-form__button-group">
+                            <input type="submit" value="Sign up">
+                        </div>
+                        <div class="login-form__content">
+                            <span class="login-form__content-line">Already have an account? <a href="/sign-in">Sign in</a></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+<%- include partials/footer.ejs %>
+</body>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gear Tracker</title>
+    <link rel="stylesheet" type="text/css" href="/styles/styles.css">
+    <script src="https://kit.fontawesome.com/d8fda67e2a.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="nav-icon"></i>
+                    <span class="logo-header">Gear Tracker</span>
+                </div>
+                <div class="nav-links">
+                    <div class="nav-item">Features<span class="underline"></span></div>
+                    <div class="nav-item">Pricing</div>
+                    <div class="nav-item">Docs</div>
+                </div>
+                <a class="purple-btn" href="/sign-in">
+                    <span>Sign in</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="section-a">
+            <div class="site-header">
+                <h1>Keep track of all your gear and its lifetime use.</h1>
+                <p>Take notes on all of your gear's wear and tear to ensure that your gear is suitable for your next big adventure</p>
+                <div class="purple-btn">
+                    <a href="/sign-up" style="color: inherit; text-decoration: none;">Sign up today</a>
+                </div>
+            </div>
+            <div class="graphic-container">
+                <div class="graph-node" style="margin-bottom: 20px; font-size: 1.1em;"><strong>Black Diamond C4 - Red #1</strong></div>
+                <div class="graph-node">
+                    <span>Jan</span> 
+                    <div class="tube" style="width: 20%"></div>
+                </div>
+                <div class="graph-node">
+                    <span>Feb</span> 
+                    <div class="tube" style="width: 35%"></div>
+                </div>
+                <div class="graph-node">
+                    <span>Mar</span> 
+                    <div class="tube" style="width: 30%"></div>
+                </div>
+                <div class="graph-node">
+                    <span>Apr</span> 
+                    <div class="tube light-blue" style="width: 50%"></div>
+                </div>
+                <div class="graph-node">
+                    <span>May</span> 
+                    <div class="tube light-blue" style="width: 60%"></div>
+                </div>
+            </div>
+        </section>
+        <section class="landing__section-b">
+            <img src="../../../images/bg-red-purple.png">
+            <div class="grid-two">
+                <div class="message-box">
+                    <h1>Manage your rack from one app.</h1>
+                    <p>Keep inventory of all of your gear. Track the number of falls you take on each piece and we will give you AI informed considerations for replacing old or heavily used gear.</p>
+                </div>
+                <div class="gear-graphic">
+                    <div class="gear-container">
+                        <p>Black Diamond C4 - Red #1</p>
+                        <p>5 years old - 2 falls < Factor 1</p>
+                        <span></span>
+                    </div>
+                    <div class="gear-container left">
+                        <p>Black Diamond C4 - Red #1</p>
+                        <p>5 years old - 2 falls < Factor 1</p>
+                    </div>
+                    <div class="gear-container">
+                        <p>Black Diamond C4 - Red #1</p>
+                        <p>5 years old - 2 falls < Factor 1</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section-c">
+            
+        </section>
+    </main>
+    <%- include partials/footer.ejs %>
+    <style>
+    
+        main {
+            margin-bottom: calc(100vw * .2);
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Open Sans";
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-item {
+            margin: 0 40px;
+            font-size: .9em;
+            cursor: pointer;
+        }
+
+        .nav-item:hover::after {
+            width: 25px;
+            height: 5px;
+            background-color: blue;
+            content: "";
+            border-bottom: 5px solid blue; 
+        }
+
+        .nav-item::after {
+            width: 25px;
+            height: 5px;
+            background-color: blue;
+        }
+
+        .purple-btn {
+            border: 1px solid #473BF0;
+            background-color: #473BF0;
+            width: fit-content;
+            color: #fff;
+            padding: 8px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: .6s;
+        }
+
+        .purple-btn:hover {
+            background-color: rgb(63, 53, 202);
+        }
+
+        .section-a .purple-btn {
+            margin-top: 30px;
+            padding: 10px 42px;
+        }
+
+        .site-header {
+            margin: 15px 0;
+        }
+
+        .logo-header {
+            font-size: 1.2em;
+            color: #473BF0;
+        }
+
+        .section-a {
+            display: grid;
+            margin: 10% 10% 0;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-two {
+            display: grid;
+            margin: 10% 10% 0;
+            padding-top: 6em;
+            grid-template-columns: 2fr 3fr;
+        }
+
+        .graphic-container {
+            margin-left: 10%;
+            border-radius: 20px;
+            box-shadow: 0 8px 50px rgba(41,40,40,0.15);
+            padding: 30px;
+        }
+
+        .graph-node {
+            display: flex;
+            margin: 13px 0;
+        }
+
+        .graph-node span {
+            width: 40px;
+            font-size: .9em;
+            font-weight: bold;
+        }
+
+        .tube {
+            height: 20px;
+            width: 100%;
+            margin: 0 0 0 10px;
+            border: 1px solid #707070;
+            align-items: center;
+            border-radius: 20px
+        }
+
+        .light-blue {
+            background-color: #7D83FF;
+            border-color: #7D83FF;
+        }
+
+        .landing__section-b {
+            margin-top: 240px;
+        }
+
+        .landing__section-b img {
+            width: 90%;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .message-box {
+            padding-right: 20px;
+            color: white;
+        }
+
+        .gear-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            width: 80%;
+            float: right;
+        }
+
+        .left {
+            float: left;
+        }
+
+        .gear-container p {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .gear-graphic {
+            padding-right: 40px;
+            padding-left: 20px;
+        }
+
+        .gear-container span {
+            width: 20px;
+            height: 20px;
+            background-color: blue;
+        }
+
+    </style>
+</body>
+</html>

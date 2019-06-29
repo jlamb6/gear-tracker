@@ -1,0 +1,335 @@
+<%- include partials/header.ejs %>
+
+    <main>
+        <section>
+        <form method="POST" action="/users/<%= user._id %>/edit" enctype="multipart/form-data">
+            <div class="personal-form">
+            <% let imgUrl = user.profileImg.split('/upload/'); %>
+                <img src="<%= imgUrl.join('/upload/w_120,c_fill,ar_1:1,g_auto,r_max/') %>" alt="Profile Image">
+                <div style="margin-left: 20px;">
+                    <h3>Change Your Profile Image</h3>
+                    <input type="file" name="image" accepts="jpg,jpeg,png" id="img-input" hidden>
+                    <input type="text" name="curImage" value="<%= user.profileImg %>" hidden>
+                    <button type="button" class="purple-btn purple-invert" onclick="document.querySelector('#img-input').click()">Choose File</button>
+                    <span style="margin-left: 20px;" id="img-name">No file chosen</span>
+                </div>
+                <div class="personal-form__form">
+                    <div class="personal-form__input-group">
+                        <label>First Name</label>
+                        <input class="input round" type="text" name="fname" value="<%= user.fname %>">
+                    </div>
+                    <div class="personal-form__input-group">
+                        <label>Last Name</label>
+                        <input class="input round" type="text" name="lname" value="<%= user.lname %>">
+                    </div>
+                    <div class="personal-form__input-group">
+                        <label>Home City, State</label>
+                        <input class="input round" type="text" name="location" value="<%= user.location %>">
+                    </div>
+                </div>
+            </div>
+        <div class="grid-2">
+            <div class="edit-form">
+                    <h3>Climbing Types</h3>
+                    <div class="edit-form__style-group">
+                        <div class="edit-form__checkbox">
+                            <input type="checkbox" name="sport" value="sport" id="sport-check">
+                            <label>Sport</label>
+                        </div>
+                        <label class="right">Lead</label>
+                        <select name="sportLead" id="sport-lead">
+                            <option value="5.5">5.5</option>
+                            <option value="5.6">5.6</option>
+                            <option value="5.7">5.7</option>
+                            <option value="5.8">5.8</option>
+                            <option value="5.9">5.9</option>
+                            <option value="5.10a">5.10a</option>
+                            <option value="5.10b">5.10b</option>
+                            <option value="5.10c">5.10c</option>
+                            <option value="5.10d">5.10d</option>
+                            <option value="5.11a">5.11a</option>
+                            <option value="5.11b">511b</option>
+                            <option value="5.11c">5.11c</option>
+                            <option value="5.11d">5.11d</option>
+                            <option value="5.12a">5.12a</option>
+                            <option value="5.12b">5.12b</option>
+                            <option value="5.12c">5.12c</option>
+                            <option value="5.12d">5.12d</option>
+                            <option value="5.13a">5.13a</option>
+                            <option value="5.13b">5.13b</option>
+                            <option value="5.13c">5.13c</option>
+                            <option value="5.13d">5.13d</option>
+                            <option value="5.14a">5.14a</option>
+                            <option value="5.14b">5.14b</option>
+                            <option value="5.14c">5.14c</option>
+                            <option value="5.14d">5.14d</option>
+                            <option value="5.15a">5.15a</option>
+                            <option value="5.15b">5.15b</option>
+                            <option value="5.15c">5.15c</option>
+                        </select>
+                        <label class="right">Follow</label>
+                        <select name="sportFollow" id="sport-follow">
+                            <option value="5.5">5.5</option>
+                            <option value="5.6">5.6</option>
+                            <option value="5.7">5.7</option>
+                            <option value="5.8">5.8</option>
+                            <option value="5.9">5.9</option>
+                            <option value="5.10a">5.10a</option>
+                            <option value="5.10b">5.10b</option>
+                            <option value="5.10c">5.10c</option>
+                            <option value="5.10d">5.10d</option>
+                            <option value="5.11a">5.11a</option>
+                            <option value="5.11b">511b</option>
+                            <option value="5.11c">5.11c</option>
+                            <option value="5.11d">5.11d</option>
+                            <option value="5.12a">5.12a</option>
+                            <option value="5.12b">5.12b</option>
+                            <option value="5.12c">5.12c</option>
+                            <option value="5.12d">5.12d</option>
+                            <option value="5.13a">5.13a</option>
+                            <option value="5.13b">5.13b</option>
+                            <option value="5.13c">5.13c</option>
+                            <option value="5.13d">5.13d</option>
+                            <option value="5.14a">5.14a</option>
+                            <option value="5.14b">5.14b</option>
+                            <option value="5.14c">5.14c</option>
+                            <option value="5.14d">5.14d</option>
+                            <option value="5.15a">5.15a</option>
+                            <option value="5.15b">5.15b</option>
+                            <option value="5.15c">5.15c</option>
+                        </select>
+                    </div>
+                    <div class="edit-form__style-group">
+                        <div class="edit-form__checkbox">
+                            <input type="checkbox" name="trad" value="trad" id="trad-check">
+                            <label>Trad</label>
+                        </div>
+                        <label class="right">Lead</label>
+                        <select name="tradLead" id="trad-lead">
+                            <option value="5.5">5.5</option>
+                            <option value="5.6">5.6</option>
+                            <option value="5.7">5.7</option>
+                            <option value="5.8">5.8</option>
+                            <option value="5.9">5.9</option>
+                            <option value="5.10a">5.10a</option>
+                            <option value="5.10b">5.10b</option>
+                            <option value="5.10c">5.10c</option>
+                            <option value="5.10d">5.10d</option>
+                            <option value="5.11a">5.11a</option>
+                            <option value="5.11b">511b</option>
+                            <option value="5.11c">5.11c</option>
+                            <option value="5.11d">5.11d</option>
+                            <option value="5.12a">5.12a</option>
+                            <option value="5.12b">5.12b</option>
+                            <option value="5.12c">5.12c</option>
+                            <option value="5.12d">5.12d</option>
+                            <option value="5.13a">5.13a</option>
+                            <option value="5.13b">5.13b</option>
+                            <option value="5.13c">5.13c</option>
+                            <option value="5.13d">5.13d</option>
+                            <option value="5.14a">5.14a</option>
+                            <option value="5.14b">5.14b</option>
+                            <option value="5.14c">5.14c</option>
+                            <option value="5.14d">5.14d</option>
+                            <option value="5.15a">5.15a</option>
+                            <option value="5.15b">5.15b</option>
+                            <option value="5.15c">5.15c</option>
+                        </select>
+                        <label class="right">Follow</label>
+                        <select name="tradFollow" id="trad-follow">
+                            <option value="5.5">5.5</option>
+                            <option value="5.6">5.6</option>
+                            <option value="5.7">5.7</option>
+                            <option value="5.8">5.8</option>
+                            <option value="5.9">5.9</option>
+                            <option value="5.10a">5.10a</option>
+                            <option value="5.10b">5.10b</option>
+                            <option value="5.10c">5.10c</option>
+                            <option value="5.10d">5.10d</option>
+                            <option value="5.11a">5.11a</option>
+                            <option value="5.11b">511b</option>
+                            <option value="5.11c">5.11c</option>
+                            <option value="5.11d">5.11d</option>
+                            <option value="5.12a">5.12a</option>
+                            <option value="5.12b">5.12b</option>
+                            <option value="5.12c">5.12c</option>
+                            <option value="5.12d">5.12d</option>
+                            <option value="5.13a">5.13a</option>
+                            <option value="5.13b">5.13b</option>
+                            <option value="5.13c">5.13c</option>
+                            <option value="5.13d">5.13d</option>
+                            <option value="5.14a">5.14a</option>
+                            <option value="5.14b">5.14b</option>
+                            <option value="5.14c">5.14c</option>
+                            <option value="5.14d">5.14d</option>
+                            <option value="5.15a">5.15a</option>
+                            <option value="5.15b">5.15b</option>
+                            <option value="5.15c">5.15c</option>
+                        </select>
+                    </div>
+                    <div class="edit-form__style-group">
+                        <div class="edit-form__checkbox">
+                            <input type="checkbox" name="boulder" value="boulder" id="boulder-check">
+                            <label>Boulder</label>
+                        </div>
+                        <label></label>
+                        <select name="boulderGrade" id="boulder-grade">
+                            <option value="V0">V0</option>
+                            <option value="V1">V1</option>
+                            <option value="V2">V2</option>
+                            <option value="V3">V3</option>
+                            <option value="V4">V4</option>
+                            <option value="V5">V5</option>
+                            <option value="V6">V6</option>
+                            <option value="V7">V7</option>
+                            <option value="V8">V8</option>
+                            <option value="V9">V9</option>
+                            <option value="V10">V10</option>
+                            <option value="V11">V11</option>
+                            <option value="V12">V12</option>
+                            <option value="V13">V13</option>
+                            <option value="V14">V14</option>
+                            <option value="V15">V15</option>
+                        </select>       
+                    </div>
+                    <div class="edit-form__style-group">
+                        <div class="edit-form__checkbox">
+                            <input type="checkbox" name="aid" value="aid" id="aid-check">
+                            <label>Aid</label>
+                        </div>
+                        <label class="right">Lead</label>
+                        <select name="aidLead" id="aid-lead">
+                            <option value="A0/C0">A0/C0</option>
+                            <option value="A1/C1">A1/C1</option>
+                            <option value="A2/C2">A2/C2</option>
+                            <option value="A3/C3">A3/C3</option>
+                            <option value="A4/C4">A4/C4</option>
+                            <option value="A5/C5">A5/C5</option>
+                        </select>
+                        <label class="right">Follow</label>
+                        <select name="aidFollow" id="aid-follow">
+                            <option value="A0/C0">A0/C0</option>
+                            <option value="A1/C1">A1/C1</option>
+                            <option value="A2/C2">A2/C2</option>
+                            <option value="A3/C3">A3/C3</option>
+                            <option value="A4/C4">A4/C4</option>
+                            <option value="A5/C5">A5/C5</option>
+                        </select>
+                    </div>
+                    <div class="edit-form__style-group">
+                        <div class="edit-form__checkbox">
+                            <input type="checkbox" name="ice" value="ice" id="ice-check">
+                            <label>Ice</label>
+                        </div>
+                        <label class="right">Lead</label>
+                        <select name="iceLead" id="ice-lead">
+                            <option value="WI1">WI1</option>
+                            <option value="WI2">WI2</option>
+                            <option value="WI3">WI3</option>
+                            <option value="WI4">WI4</option>
+                            <option value="WI5">WI5</option>
+                            <option value="WI6">WI6</option>
+                            <option value="WI7">WI7</option>
+                            <option value="WI8">WI8</option>
+                        </select>
+                        <label class="right">Follow</label>
+                        <select name="iceFollow" id="ice-follow">
+                            <option value="WI1">WI1</option>
+                            <option value="WI2">WI2</option>
+                            <option value="WI3">WI3</option>
+                            <option value="WI4">WI4</option>
+                            <option value="WI5">WI5</option>
+                            <option value="WI6">WI6</option>
+                            <option value="WI7">WI7</option>
+                            <option value="WI8">WI8</option>
+                        </select>
+                    </div>
+            </div>
+            <div>
+                <h3>Climbing Areas</h3>
+                <ul id="area-list">
+                    <% if (user.climbingAreas.length > 0) { %>
+                        <% user.climbingAreas.forEach(cur => { %>
+                            <li><%= cur %></li>
+                        <% }); %>
+                    <% } else { %>
+                        <li>None</li>
+                    <% }; %>
+                </ul>
+                <button type="button" id="add-area" class="purple-btn purple-invert">Add</button>
+                <input type="text" name="climbingAreas" value="<%= user.climbingAreas.join('||') %>" id="climbing-areas" hidden>
+            </div>
+        </div>
+        <section>
+            <button type="submit" class="large-edit">Save</button>
+            <button type="button" class="large-edit purple-invert-cancel" onclick="window.location.href='/users/<%= user._id %>'">Cancel</button>
+        </section>
+        </form>
+    </main>
+<%- include partials/footer.ejs %>
+<script>
+
+document.querySelector("#img-input").addEventListener("input", (event) => {
+    let path = event.target.value.split('\\');
+    let img = path.slice(-1);
+    document.querySelector("#img-name").innerText = img;
+});
+
+document.querySelector("#add-area").addEventListener("click", (event) => {
+    let areas = document.querySelector("#climbing-areas").value;
+    event.target.innerText = "Sumit";
+    // replace the first li with an input box
+    let input = document.createElement("input");
+    input.addEventListener("keypress", (event) => {
+        if (event.keyCode === 13) {
+            // add value to the list and then add it to the hidden input
+            let areas = (document.querySelector("#climbing-areas").value.length === 0) ? [] : document.querySelector("#climbing-areas").value.split("||");
+            areas.push(event.target.value);
+            document.querySelector("#climbing-areas").value = areas.join("||");
+            let li = document.createElement("li");
+            li.innerText = event.target.value;
+            document.querySelector("#area-list").appendChild(li);
+            //remove the input
+            event.target.parentNode.removeChild(event.target);
+        }
+    });
+    if (areas.length === 0) {
+        document.querySelector("#area-list").removeChild(document.querySelector("#area-list").firstElementChild);
+    }
+    document.querySelector("#area-list").appendChild(input);
+    input.focus();
+});
+
+const grades = <%- user.climbingStyles %>;
+
+const setSelect = (grades) => {
+    if (grades.sport.checked) {
+        document.querySelector("#sport-lead").value = grades.sport.lead;
+        document.querySelector("#sport-follow").value = grades.sport.follow;
+        document.querySelector("#sport-check").checked = true;
+    }
+    if (grades.trad.checked) {
+        document.querySelector("#trad-lead").value = grades.trad.lead;
+        document.querySelector("#trad-follow").value = grades.trad.follow;
+        document.querySelector("#trad-check").checked = true;
+    }
+    if (grades.boulder.checked) {
+        document.querySelector("#boulder-grade").value = grades.boulder.grade;
+        document.querySelector("#boulder-check").checked = true;
+    }
+    if (grades.aid.checked) {
+        document.querySelector("#aid-follow").value = grades.aid.follow;
+        document.querySelector("#aid-lead").value = grades.aid.lead;
+        document.querySelector("#aid-check").checked = true;
+    }
+    if (grades.ice.checked) {
+        document.querySelector("#ice-lead").value = grades.ice.lead;
+        document.querySelector("#ice-follow").value = grades.ice.follow;
+        document.querySelector("#ice-check").checked = true;
+    }
+}
+
+setSelect(grades);
+
+</script>
+</body>
